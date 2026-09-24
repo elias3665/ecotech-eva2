@@ -1,4 +1,5 @@
-from persistencia.conexion import abrir_conexion, obtener_motor
+from persistencia.conexion import abrir_conexion, obtener_motor, marcador_sql
+from dominio.empleado import Empleado
 
 class EmpleadoDAO:
     @staticmethod
@@ -16,3 +17,20 @@ class EmpleadoDAO:
         conexion.close()
 
         return empleado 
+    
+    @staticmethod
+    def buscar_por_id(id_empleado):
+        conexion = abrir_conexion()
+        cursor = conexion.cursor()
+
+        marca = marcador_sql()
+        sql = f"""
+                SELECT id, nombre, email 
+                FROM empleado WHERE id = {marca}
+            """
+        cursor.execute(sql, (id_empleado,))
+        fila = cursor.fetchone()
+        conexion.close()
+        if fila is None:
+            return None
+        return Empleado(id=fila[0], nombre=fila[1], email=fila[2])

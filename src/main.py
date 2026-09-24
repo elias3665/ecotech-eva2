@@ -8,3 +8,11 @@ print("Antes:", empleado.id)
 # None
 EmpleadoDAO.insertar(empleado)
 print("Después:", empleado.id)
+
+
+encontrado = EmpleadoDAO.buscar_por_id(empleado.id)
+print("Encontrado:", encontrado.mostrar_datos())
+
+print("Listado:")
+for item in EmpleadoDAO.listar():
+        print(item) 
