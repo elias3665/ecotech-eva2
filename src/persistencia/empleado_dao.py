@@ -34,3 +34,39 @@ class EmpleadoDAO:
         if fila is None:
             return None
         return Empleado(id=fila[0], nombre=fila[1], email=fila[2])
+    
+    @staticmethod
+    def listar():
+        conexion = abrir_conexion()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT id, nombre, email FROM empleado")
+        filas = cursor.fetchall()
+        conexion.close()
+        return [Empleado(id=f[0], nombre=f[1], email=f[2])for f in filas]
+    
+    @staticmethod
+    def actualizar(empleado):
+        conexion = abrir_conexion()
+        cursor = conexion.cursor()
+        marca = marcador_sql()
+        sql = f"""
+            UPDATE empleado
+            SET nombre = {marca}, email = {marca}
+            WHERE id = {marca}
+"""
+        cursor.execute(sql, (empleado.nombre, empleado.email, empleado.id, ))
+        conexion.commit()
+        filas = cursor.rowcount
+        conexion.close()
+        return filas > 0
+    
+    @staticmethod
+    def eliminar(id:Empleado):
+        conexion = abrir_conexion()
+        cursor = conexion.cursor()
+        marca = marcador_sql()
+        cursor.execute(f"DELETE FROM empleado WHERE id = {marca}", (id_empleado,))
+        conexion.commit()
+        filas = cursor.rowcount
+        conexion.close()
+        return filas > 0
