@@ -1,105 +1,37 @@
 from persistencia.crear_bd import crear_tablas
-from dominio.empleado import Empleado
-from persistencia.empleado_dao import EmpleadoDAO
+from menu.menu_empleado import menu_empleado
+from menu.menu_proyecto import menu_proyecto
+from menu.menu_registro import menu_registro
 
-
-
-crear_tablas()
-# empleado = Empleado(nombre="Ana Pérez", email="ana@ecotech.cl")
-# print("Antes:", empleado.id)
-# # None
-# EmpleadoDAO.insertar(empleado)
-# print("Después:", empleado.id)
-
-
-# encontrado = EmpleadoDAO.buscar_por_id(empleado.id)
-# print("Encontrado:", encontrado.mostrar_datos())
-
-# print("Listado:")
-# for item in EmpleadoDAO.listar():
-#         print(item) 
-
-def mostrar_menu():
-        print("\n===== ECOTECH =====")
-        print("1. Registrar empleado")
-        print("2. Listar empleados")
-        print("3. Buscar empleado")
-        print("4. Actualizar empleado")
-        print("5. Eliminar empleado")
-        print("0. Salir")
 def main():
+        try:
+                crear_tablas()
+        except Exception as e:
+                print(f"Error crítico al inicializar la base de datos: {e}")
+
+
         while True:
-                mostrar_menu()
-                opcion = input("Seleccione una opción: ")
+                print("\n===== ECOTECH: SISTEMA DE CONTROL INTEGRADO =====")
+                print("1. Módulo de Empleados")
+                print("2. Módulo de Proyectos")
+                print("3. Módulo de Registros de Tiempo (Relación Multi-Entidad)")
+                print("0. Salir de la Aplicación")
+                
+                opcion = input("Seleccione una opción del sistema: ").strip()
+                
                 if opcion == "1":
-                        registrar_empleado()
+                        menu_empleado()
                 elif opcion == "2":
-                        listar_empleados()
+                        menu_proyecto()
+                elif opcion == "3":
+                        menu_registro()
                 elif opcion == "0":
-                        print("Hasta luego.")
+                        print("Cerrando sesión en EcoTech. Hasta luego.")
                         break
                 else:
-                        print("Opción no válida.")
+                        print("Opción no válida. Intente con los números del menú.")
+
 if __name__ == "__main__":
         main()
 
-def registrar_empleado():
-        nombre = input("Nombre: ").strip()
-        correo = input("Correo: ").strip()
-        empleado = Empleado(nombre, correo)
-        try:
-                EmpleadoDAO.insertar(empleado)
-                print("Empleado registrado correctamente.")
-        except Exception:
-                print("No fue posible registrar el empleado.")
-
-def listar_empleados():
-        empleados = EmpleadoDAO.listar()
-        if not empleados:
-                print("No hay empleados registrados.")
-                return
-        for e in empleados:
-                print(f"{e.id} - {e.mostrar_datos()}")
-
-def buscar_empleado():
-        try:
-                id_empleado =int(input("ID del empleado: "))
-        except ValueError:
-                print("El ID deber sel un número.")
-                empleado = EmpleadoDAO.buscar_por_id(id_empleado)
-                if empleado is None:
-                        print("Empleado no encontrado.")
-                else:
-                        print(empleado.mostrar_datos())
-
-def actualizar_empleado():
-        try:
-                id_empleado = int(input("ID del empleado a actualizar: "))
-        except ValueError:
-                print("el ID debe ser un numero.")
-                return
-        actual = EmpleadoDAO.buscar_por_id(id_empleado)
-        if actual is None:
-                print("Empleado no encontrado.")
-                nombre = input(f"Nombre [{actual.nombre}]: ").strip() or actual.nombre
-                email = input(f"email [{actual.email}]: ").strip() or actual.email
-                try:
-                        EmpleadoDAO.actualizar(Empleado(nombre, email, id_empleado))
-                        print("Empleado actualizado correctamente.")
-                except Exception:
-                        print("No fue posible actualizar el empleado.")
-
-def eliminar_empleado():
-        try:
-                id_empleado = int(input("ID del empleado a eliminar: "))
-        except ValueError:
-                print("El ID debe ser un numero.")
-                return
-        try:
-                if EmpleadoDAO.eliminar(id_empleado):
-                        print("Empleado eliminado correctamente.")
-                else:
-                        print("empleado no encontrado.")
-        except Exception:
-                print(" no fue posible eliminar el empleado.")
 
