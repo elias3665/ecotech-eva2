@@ -61,6 +61,9 @@ def crear_tablas():
                 )
             ''')
         conexion.commit()
+    except Exception:
+        conexion.rollback()
+        raise
     finally:
         conexion.close()
 

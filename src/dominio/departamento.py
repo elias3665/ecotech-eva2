@@ -1,17 +1,18 @@
-from typing import list, Optional
-from dominio.empleado import Empleado
 class Departamento:
     
-    def _init_(self, id_dept: int, nombre: str, gerente:str):
+    def __init__(self, id_dept: int, nombre: str, gerente:str):
         self._id_dept = id_dept
         self._nombre = nombre
         self._gerente = gerente
 
+    @property
     def nombre(self)-> str:
-        return self.nombre
+        return self._nombre
 
-    def id_dept(self)-> str:
-        return self.id_dept
+    @property
+    def id_dept(self)-> int:
+        return self._id_dept
 
+    @property
     def gerente(self)-> str:
-        return self.gerente
+        return self._gerente

@@ -17,6 +17,9 @@ class RegistroTrabajoDAO:
             conexion.commit()
             registro.id = cursor.lastrowid
             return registro
+        except Exception:
+            conexion.rollback()
+            raise
         finally:
             conexion.close()
 

@@ -12,11 +12,14 @@ class ProyectoDAO:
             cursor.execute(sql, (proyecto.id_proyecto, proyecto.nombre, proyecto.fecha_inicio))
             conexion.commit()
             return proyecto
+        except Exception:
+            conexion.rollback()
+            raise
         finally:
             conexion.close()
 
     @staticmethod
-    def buscar_por_id(id_proyecto: str) -> Proyecto:
+    def buscar_por_id(id_proyecto: str) -> Proyecto | None:
         conexion = abrir_conexion()
         cursor = conexion.cursor()
         try:
@@ -51,6 +54,9 @@ class ProyectoDAO:
             cursor.execute(sql, (proyecto.nombre, proyecto.fecha_inicio, proyecto.id_proyecto))
             conexion.commit()
             return cursor.rowcount > 0
+        except Exception:
+            conexion.rollback()
+            raise
         finally:
             conexion.close()
 
@@ -64,5 +70,8 @@ class ProyectoDAO:
             cursor.execute(sql, (id_proyecto,))
             conexion.commit()
             return cursor.rowcount > 0
+        except Exception:
+            conexion.rollback()
+            raise
         finally:
             conexion.close()
